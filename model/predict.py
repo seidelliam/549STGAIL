@@ -52,9 +52,9 @@ print("MSE between input and reconstructed:", mse.item())
 
 ha = input("Type to unfreeze")
 # Load data
-speed = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/549STGAIL/pretrain/speed_SZ.csv")).to(device)
-demand = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/549STGAIL/pretrain/demand_SZ.csv")).to(device)
-inflow = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/549STGAIL/pretrain/demand_SZ.csv")).to(device)
+speed = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/speed_SZ.csv")).to(device)
+demand = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/demand_SZ.csv")).to(device)
+inflow = torch.tensor(loaddata("/Users/liamseidel/Documents/STGAIL-main/demand_SZ.csv")).to(device)
 edge = np.load('adjacency_matrices_30.npy')
 
 # Process data
@@ -85,6 +85,7 @@ mask[:, -2:] = 0  # mask last 2 timesteps
 
 # Load models
 model = GCNEDModel(1, 16, 1).to(device)
+
 model.encoder.load_state_dict(torch.load("posttrain/model_encoder_checkpoint_epoch80.pth", map_location=torch.device("cpu")) )
 model.decoder.load_state_dict(torch.load("posttrain/model_decoder_checkpoint_epoch80.pth",  map_location=torch.device("cpu")) )
 model.eval()
@@ -101,8 +102,8 @@ pred = diff_model(latent, edge_sample, mask) #skip this for test 2 stage for enc
 decoded = model.decoder(pred, edge_index)
 
 # Visualize prediction vs. ground truth
-ground_truth = (masked_x.squeeze(-1).cpu().detach()) #ground_truth = masked_x.squeeze(-1).cpu().detach()
-prediction = decoded.squeeze(-1).cpu().detach() #prediction = decoded.squeeze(-1).cpu().detach()
+ground_truth = masked_x.squeeze(-1).detach().cpu().numpy() #ground_truth = masked_x.squeeze(-1).cpu().detach()
+prediction = decoded.squeeze(-1).detach().cpu().numpy() #prediction = decoded.squeeze(-1).cpu().detach()
 
 #gt = (denormalize(ground_truth, min_i, max_i)).numpy()
 #pred = (denormalize(prediction, min_i, max_i)).numpy()
