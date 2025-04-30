@@ -102,22 +102,24 @@ pred = diff_model(latent, edge_sample, mask) #skip this for test 2 stage for enc
 decoded = model.decoder(pred, edge_index)
 
 # Visualize prediction vs. ground truth
-ground_truth = masked_x.squeeze(-1).detach().cpu().numpy() #ground_truth = masked_x.squeeze(-1).cpu().detach()
+ground_truth = x_sample.squeeze(-1).detach().cpu().numpy() #ground_truth = masked_x.squeeze(-1).cpu().detach()
 prediction = decoded.squeeze(-1).detach().cpu().numpy() #prediction = decoded.squeeze(-1).cpu().detach()
 
 #gt = (denormalize(ground_truth, min_i, max_i)).numpy()
 #pred = (denormalize(prediction, min_i, max_i)).numpy()
 
 
+loss = np.mean(np.square(np.subtract(ground_truth, prediction)))
+print(loss)
+#for hour in range(12):
 
-for hour in range(12):
-    plt.figure()
-    plt.title(f"Hour {hour}")
-    plt.imshow(ground_truth[0, hour].reshape(10,10), cmap="viridis", label="GT")
-    plt.colorbar()
-    plt.show()
-    plt.figure()
-    plt.title(f"Hour {hour}")
-    plt.imshow(prediction[0, hour].reshape(10,10), cmap="viridis", label="Predicted")
-    plt.colorbar()
-    plt.show()
+    #plt.figure()
+    #plt.title(f"Hour {hour}")
+    #plt.imshow(ground_truth[0, hour].reshape(10,10), cmap="viridis", label="GT")
+    #plt.colorbar()
+    #plt.show()
+    #plt.figure()
+    #plt.title(f"Hour {hour}")
+    #plt.imshow(prediction[0, hour].reshape(10,10), cmap="viridis", label="Predicted")
+    #plt.colorbar()
+    #plt.show()
