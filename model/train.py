@@ -112,10 +112,10 @@ def main():
     model = GCNEDModel(in_channels, hidden_channels, out_channels).to(device)
     model.train()
     model.encoder.load_state_dict(torch.load
-                                  ("/Users/liamseidel/Documents/STGAIL-main/549STGAIL/model/posttrain/model_encoder_checkpoint_epoch80.pth",
+                                  ("/549STGAIL/model/saved_checkpoints/model_encoder_checkpoint_epoch80.pth",
                                    map_location=torch.device('cpu')))  # weights_only -> True
     model.decoder.load_state_dict(torch.load
-                                  ("/Users/liamseidel/Documents/STGAIL-main/549STGAIL/model/posttrain/model_decoder_checkpoint_epoch80.pth",
+                                  ("/549STGAIL/model/saved_checkpoints/model_decoder_checkpoint_epoch80.pth",
                                    map_location=torch.device('cpu')))  # weights_only -> True
 
     diff = DiffusionModel(in_channels, num_timesteps, num_features=num_features, device=device).to(device)
@@ -187,7 +187,7 @@ def main():
         plt.show()
 
 
-def save_model(epoch, model, time_step, path="/Users/liamseidel/Documents/STGAIL-main/549STGAIL/model/posttrain/model_checkpoint_ts{}_epoch{}.pth"):
+def save_model(epoch, model, time_step, path="/Users/liamseidel/Documents/STGAIL-main/549STGAIL/model/saved_checkpoints/model_checkpoint_ts{}_epoch{}.pth"):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     torch.save(model.state_dict(), path.format(time_step, epoch))
 
